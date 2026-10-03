@@ -25,7 +25,6 @@ fn main(){
 }
 ```
 - similar thing would happen w/ functions:
-    - 
     - return values also transfers ownership of values (back to the caller)
     - issue is, what if we want to keep ownership but not have to return? **references**
 ```rust
@@ -60,4 +59,34 @@ fn change(some_string: &mut String) {   // add `mut` onto the argument
 }
 ```
 
+- can't create a *mutable references* when there exists other references being used **simultaneously** (meaning no race conditions)
+```rust
+let mut s = String::from("hello");
 
+let r1 = &s;
+let r2 = &s;
+println!("{r1}, {r2}");
+// r1 & r2 won't be used past here
+
+let r3 = &mut s; // no problem, since r1 & r2 won't be used past r3's definition
+```
+
+- possible to dangle pointers asw, if we return a *reference*, but the original variable gets deallocated
+
+## string slices:
+
+e.g. if we want to write a function that returns the first word in a string:
+
+```rust
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+```
