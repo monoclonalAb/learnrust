@@ -100,3 +100,47 @@ match dice_roll {
     _ => reroll(),
 }
 ```
+
+## `if let` and `let...else`:
+
+```rust
+let config_max = Some(3u8);
+
+// this
+match config_max {
+    Some(max) => println!("The maximum is configured to be {max}");
+    _ => (),
+}
+
+// is the same as
+if let Some(max) = config_max {
+    // the variable `max` is now usable
+    println!("The maximum is configured to be {max}");
+}
+// can add an `else` function as a "catch-all"
+```
+
+```rust
+// NOTE
+if let Some(max) = config_max {
+    if (max > 10) {
+        // ...
+    } else {
+        // ...
+    }
+}
+
+// is the same as
+
+let Some(max) = config_max else {
+    return None;
+}
+
+if (max > 10) {
+    // ...
+} else {
+    // ...
+}
+
+```
+
